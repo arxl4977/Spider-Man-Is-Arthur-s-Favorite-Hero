@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Permanent Game Uploads</title>
+<style>
+  body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+  #game-frame { width: 800px; height: 600px; border: 2px solid #333; margin-top: 20px; }
+  #game-list { margin-top: 20px; list-style: none; padding: 0; }
+  li { margin: 5px 0; }
+</style>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body>
+<h1>Upload and Play Games</h1>
+
+<input type="file" id="fileInput" webkitdirectory directory multiple>
+<button id="uploadBtn">Upload Game</button>
+
+<h2>Available Games</h2>
+<ul id="game-list"></ul>
+
+<iframe id="game-frame"></iframe>
+
+<script>
+// ==== Firebase config ====
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const storage = firebase.storage();
+const db = firebase.database();
+
+const input = document.getElementById('fileInput');
+const uploadBtn = document.getElementById('uploadBtn');
+const gameList = document.getElementById('game-list');
+const frame = document.getElementById('game-frame');
+
+uploadBtn.addEventListener('click', async () => {
+    if (!input.files.length) return alert("Select files first!");
+    
+    const folderName = prompt("Enter a name for your game:");
+    if (!folderName) return;
+
+    let mainHTML = null;
+
+    // Upload files
+    for (const file of input.files) {
+        const relativePath = file.webkitRelativePath.split('/').slice(1).join('/');
+        const storagePath = `${folderName}/${relativePath}`;
+        await storage.ref(storagePath).put(file);
+
+        if (!mainHTML && file.name.endsWith('.html')) {
+            mainHTML = storagePath; // first HTML file becomes main
+        }
+    }
+
+    if (!mainHTML) return alert("No HTML file found in folder!");
+
+    // Save main HTML path in database
+    db.ref('games/' + folderName).set({ html: mainHTML });
+    alert("Game uploaded successfully!");
+    loadGames();
+});
+
+function loadGames() {
+    gameList.innerHTML = '';
+    db.ref('games').once('value', snapshot => {
+        snapshot.forEach(gameSnap => {
+            const game = gameSnap.val();
+            const li = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = "#";
+            link.textContent = gameSnap.key;
+            link.addEventListener('click', async () => {
+                const url = await storage.ref(game.html).getDownloadURL();
+                frame.src = url;
+            });
+            li.appendChild(link);
+            gameList.appendChild(li);
+        });
+    });
+}
+
+// Initial load
+loadGames();
+</script>
+</body>
+</html>

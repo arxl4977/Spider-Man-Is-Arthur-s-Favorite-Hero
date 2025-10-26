@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Game Portal</title>
+<style>
+  body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+  #game-frame { width: 800px; height: 600px; border: 2px solid #333; margin-top: 20px; }
+  #game-list { list-style: none; padding: 0; margin-top: 20px; }
+  li { margin: 5px 0; }
+  a { text-decoration: none; color: blue; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<h1>Game Portal</h1>
+<p>Click a game to play:</p>
+
+<ul id="game-list"></ul>
+
+<iframe id="game-frame"></iframe>
+
+<script>
+// Auto-list folders with index.html
+async function loadGames() {
+    const gameList = document.getElementById('game-list');
+    gameList.innerHTML = '';
+
+    // Replace this with the folder names you want to list
+    // Each folder must have an index.html inside
+    const games = [
+        "CoolBoy",
+        "AnotherGame",
+        "SampleGame"
+    ];
+
+    games.forEach(game => {
+        const li = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = "#";
+        link.textContent = game;
+        link.addEventListener('click', () => {
+            const url = game + '/index.html'; // assumes index.html inside each folder
+            document.getElementById('game-frame').src = url;
+        });
+        li.appendChild(link);
+        gameList.appendChild(li);
+    });
+}
+
+loadGames();
+</script>
+</body>
+</html>

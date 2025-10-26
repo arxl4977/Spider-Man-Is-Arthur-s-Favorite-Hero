@@ -6,48 +6,29 @@
 <title>My Game Portal</title>
 <style>
   body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-  #game-frame { width: 800px; height: 600px; border: 2px solid #333; margin-top: 20px; }
-  #game-list { list-style: none; padding: 0; margin-top: 20px; }
-  li { margin: 5px 0; }
-  a { text-decoration: none; color: blue; }
-  a:hover { text-decoration: underline; }
+  #game-frame { width: 800px; height: 600px; border: 2px solid #333; margin: 20px auto; display: block; }
+  .scratch-game { text-align: center; margin: 40px 0; }
+  .game-title { font-size: 24px; margin-bottom: 10px; }
 </style>
 </head>
 <body>
-<h1>Game Portal</h1>
-<p>Click a game to play:</p>
 
-<ul id="game-list"></ul>
+<h1>Welcome to My Game Portal</h1>
 
-<iframe id="game-frame"></iframe>
+<!-- Example: Existing uploaded games -->
+<h2>Other Games</h2>
+<ul>
+    <li><a href="CoolBoy/">CoolBoy (Uploaded Game)</a></li>
+</ul>
 
-<script>
-// Auto-list folders with index.html
-async function loadGames() {
-    const gameList = document.getElementById('game-list');
-    gameList.innerHTML = '';
-
-    // Replace this with the folder names you want to list
-    // Each folder must have an index.html inside
-    const games = [
-        "CoolBoy",
-        "AnotherGame",
-        "SampleGame"
-    ];
-
-    games.forEach(game => {
-        const li = document.createElement('li');
-        const link = document.createElement('a');
-        link.href = "#";
-        link.textContent = game;
-        link.addEventListener('click', () => {
-            const url = game + '/index.html'; // assumes index.html inside each folder
-            document.getElementById('game-frame').src = url;
-        });
-        li.appendChild(link);
-        gameList.appendChild(li);
-    });
-}
+<!-- Scratch Game Section -->
+<div class="scratch-game">
+    <div class="game-title">CoolBoy Scratch Game</div>
+    <iframe src="https://scratch.mit.edu/projects/1065264380/embed" 
+            allowtransparency="true" width="485" height="402" frameborder="0" 
+            scrolling="no" allowfullscreen>
+    </iframe>
+</div>
 
 loadGames();
 </script>

@@ -44,9 +44,6 @@
   button:hover {
     background-color: #555;
   }
-  .link-button {
-    text-decoration: none;
-  }
 </style>
 </head>
 <body>
@@ -63,10 +60,9 @@
 <div class="menu">
   <button onclick="showGame('projectfreddy')">Project Freddy</button>
   <button onclick="showGame('buildup')">Build Up</button>
-  <button onclick="showGame('fullscreenmario')">Full Screen Mario</button>
 </div>
 
-<!-- Scratch / Embedded Games -->
+<!-- Scratch Games -->
 <div id="projectfreddy" class="scratch-game active-game">
     <div class="game-title">Project Freddy</div>
     <iframe src="https://scratch.mit.edu/projects/1065264380/embed"
@@ -80,14 +76,6 @@
             allowtransparency="true" width="800" height="600" frameborder="0"
             scrolling="no" allowfullscreen
             sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
-</div>
-
-<div id="fullscreenmario" class="scratch-game">
-  <div class="game-title">Full Screen Mario</div>
-  <p>This game cannot be embedded, but you can play it on its website:</p>
-  <a href="https://newstargeted.com/full-screen-mario" target="_blank" class="link-button">
-    <button>Play Full Screen Mario</button>
-  </a>
 </div>
 
 <script>
